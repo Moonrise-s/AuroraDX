@@ -1,0 +1,4 @@
+<aurora>
+    <oop>true</oop>
+    <script src = 'src/client/components/button.lua' type = 'client' cache = 'false' />
+</aurora>
