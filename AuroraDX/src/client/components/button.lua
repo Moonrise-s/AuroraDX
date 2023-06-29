@@ -93,7 +93,7 @@ function button:render ()
         end
 
         dxDrawRectangle (
-            self.x , self.y,
+            self.x, self.y,
             self.w, self.h,
             self:interpolate (self.bgColor, position)
         )
