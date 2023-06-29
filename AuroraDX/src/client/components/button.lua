@@ -1,3 +1,4 @@
+
 local button = {}
 setmetatable (button, {__index = button})
 button.elements = {}
@@ -94,7 +95,7 @@ function buttonRender ()
         dxDrawText (
             self.text,
             self.x, self.y,
-            self.x + self.w, self.y + self.h,
+            self.w, self.h,
             self:interpolate (hover, self.textColor, position),
             1, self.font,
             'center', 'center'
@@ -110,3 +111,5 @@ function buttonClick (b, s, x, y)
         end
     end
 end
+
+export ('button', button)
