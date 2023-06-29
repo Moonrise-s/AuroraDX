@@ -6,32 +6,30 @@ button.elements = {}
 local hover
 
 function button:create (data)
-    if (not self) then return error ('Argument #1 is NULL. Define the object.') end
+    if (not self) then return error ('Error in argument #1. Define the object.') end
     if (self.elements[id]) then return error ('Button exists') end
 
     local datas = data
 
-    if (#self.elements <= 0) then
-        addEventHandler ('onClientRender', root, buttonRender)
-        addEventHandler ('onClientClick', root, buttonClick)
-    end
-
     setmetatable (datas, {__index = button})
     table_insert (button.elements, datas)
+
+    if (#button.elements <= 1) then
+        addEventHandler ('onClientClick', root, buttonClick)
+    end
 
     return datas
 end
 
 function button:destroy ()
-    if (not self) then return error ('Argument #1 is NULL. Define the object.') end
+    if (not self) then return error ('Error in argument #1. Define the object.') end
     if (hover == self) then hover = nil end
     for position, data in ipairs (button.elements) do
         if (data == self) then
             table_remove (button.elements, position)
             if (#button.elements <= 0) then
-                removeEventHandler ('onClientRender', root, buttonRender)
                 removeEventHandler ('onClientClick', root, buttonClick)
-            end
+            end        
         end
     end
 end
@@ -78,7 +76,7 @@ function button:interpolate (hover, colors, id)
     return (hover == self and tocolor (unpack (colors.hover)) or tocolor (unpack (colors.notHover)))
 end
 
-function buttonRender ()
+function button:render ()
     for position, self in ipairs (button.elements) do
 
         hover = nil
@@ -100,6 +98,7 @@ function buttonRender ()
             1, self.font,
             'center', 'center'
         )
+
 
     end
 end
