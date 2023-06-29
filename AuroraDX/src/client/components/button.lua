@@ -93,15 +93,15 @@ function button:render ()
         end
 
         dxDrawRectangle (
-            self.x + 2, self.y + 2,
-            self.w - 2, self.h - 4,
+            self.x , self.y,
+            self.w, self.h,
             self:interpolate (self.bgColor, position)
         )
 
         dxDrawText (
             self.text,
-            self.x + 2, self.y + 2,
-            self.w - 2, self.h - 4,
+            self.x, self.y,
+            self.w , self.h ,
             self:interpolate (self.textColor, position),
             1, self.font,
             'center', 'center'
