@@ -12,7 +12,6 @@ function button:create (data)
 
     setmetatable (datas, {__index = button})
     table_insert (button.elements, datas)
-    writeText ('1', 'Givar Dinheiro')
 
     if (#button.elements <= 1) then
         addEventHandler ('onClientClick', root, buttonClick)
