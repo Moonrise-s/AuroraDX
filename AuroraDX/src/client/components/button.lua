@@ -1,9 +1,3 @@
-
-local table_insert = table.insert
-local table_remove = table.remove
-
-local screenW, screenH = guiGetScreenSize()
-
 local button = {}
 setmetatable (button, {__index = button})
 button.elements = {}
@@ -14,7 +8,7 @@ function button:create (data)
     if (not self) then return error ('Argument #1 is NULL. Define the object.') end
     if (self.elements[id]) then return error ('Button exists') end
 
-    local datas = data or {text = '', x = 0, y = 0, w = 0, h = 0, atributte = function () return end, bgColor = {notHover = tocolor (255, 0, 0), hover = tocolor (255, 255, 255)}, textColor = {notHover = tocolor (0, 0, 0), hover = tocolor (255, 0, 0)}, font = 'default' }
+    local datas = data
 
     if (#self.elements <= 0) then
         addEventHandler ('onClientRender', root, buttonRender)
@@ -41,10 +35,10 @@ function button:destroy ()
     end
 end
 
-function button:isInside (x, y)
+function button:isInside ()
     if (not isCursorShowing ()) then return end
     local cx, cy = getCursorPosition ()
-    local x, y = x or (cx * screenW), y or (cy * screenH)
+    local x, y = (cx * screenW), (cy * screenH)
     return ((x >= self.x and x <= self.x + self.w) and (y >= self.y and y <= self.y + self.h))
 end
 
@@ -87,7 +81,7 @@ function buttonRender ()
     for position, self in ipairs (button.elements) do
 
         hover = nil
-        if (self:isInside (mx, my)) then
+        if (self:isInside ()) then
             hover = self
         end
 
@@ -116,60 +110,3 @@ function buttonClick (b, s, x, y)
         end
     end
 end
-
-function testFunction ()
-    a:destroy ()
-    return givePlayerMoney (1000), print 'Você recebeu $1000'
-end
-
-a = button:create ({
-    id = 'box',
-    text = 'hello',
-    x = screenW/2 - 100/2,
-    y = screenH/2 - 100/2,
-    w = 100,
-    h = 100,
-    atributte = testFunction,
-    bgColor = {hover = {255, 255 ,255}, notHover = {255, 0, 0}, effect = 'none'},
-    textColor = {hover = {0, 0, 0}, notHover = {255, 255, 255}, effect = 'none'},
-    font = 'default'
-})
-
-b = button:create ({
-    id = 'box2',
-    text = 'hello2',
-    x =( screenW/2 - 100/2) + 110,
-    y = screenH/2 - 100/2,
-    w = 100,
-    h = 100,
-    atributte = testFunction,
-    bgColor = {hover = {255, 255 ,255}, notHover = {25, 25, 25}, effect = 'Linear'},
-    textColor = {hover = {0, 0, 0}, notHover = {255, 255, 255}, effect = 'none'},
-    font = 'default'
-})
-
-c = button:create ({
-    id = 'box3',
-    text = 'hello3',
-    x =( screenW/2 - 100/2) + 220,
-    y = screenH/2 - 100/2,
-    w = 100,
-    h = 100,
-    atributte = testFunction,
-    bgColor = {hover = {255, 255 ,255}, notHover = {255, 0, 0}, effect = 'none'},
-    textColor = {hover = {0, 0, 0}, notHover = {255, 255, 255}, effect = 'InOutQuad'},
-    font = 'default'
-})
-
-d = button:create ({
-    id = 'box4',
-    text = 'hello4',
-    x =( screenW/2 - 100/2) + 330,
-    y = screenH/2 - 100/2,
-    w = 100,
-    h = 100,
-    atributte = testFunction,
-    bgColor = {hover = {255, 255 ,255}, notHover = {255, 0, 0}, effect = 'InOutElastic'},
-    textColor = {hover = {0, 0, 0}, notHover = {255, 255, 255}, effect = 'none'},
-    font = 'default'
-})
