@@ -50,14 +50,19 @@ function button:interpolate (hover, colors, id)
         effects[type] = nil
     end
 
+    local state = false
     if (hover and hover == self and colors.effect ~= 'none') then
+        state = true
+    end
+    
+    if (state) then
         if (not effects[type]) then
             effects[type] = {
                 status = {start = colors.notHover, final = colors.hover, effect = colors.effect},
                 tick = getTickCount ()
             }
         end
-     
+        
         local progress = (getTickCount () - effects[type].tick) / 800
 
         local r, g, b = interpolateBetween (
@@ -70,7 +75,7 @@ function button:interpolate (hover, colors, id)
             progress,
             effects[type].effect or 'Linear'
         )
-
+        
         return tocolor (r, g, b)
     end
     return (hover == self and tocolor (unpack (colors.hover)) or tocolor (unpack (colors.notHover)))
@@ -85,15 +90,15 @@ function button:render ()
         end
 
         dxDrawRectangle (
-            self.x, self.y,
-            self.w, self.h,
+            self.x + 2, self.y + 2,
+            self.w - 2, self.h - 4,
             self:interpolate (hover, self.bgColor, position)
         )
 
         dxDrawText (
             self.text,
-            self.x, self.y,
-            self.w, self.h,
+            self.x + 2, self.y + 2,
+            self.w - 2, self.h - 4,
             self:interpolate (hover, self.textColor, position),
             1, self.font,
             'center', 'center'
