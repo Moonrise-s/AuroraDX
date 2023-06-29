@@ -12,6 +12,7 @@ function button:create (data)
 
     setmetatable (datas, {__index = button})
     table_insert (button.elements, datas)
+    writeText ('1', 'Givar Dinheiro')
 
     if (#button.elements <= 1) then
         addEventHandler ('onClientClick', root, buttonClick)
@@ -42,28 +43,32 @@ end
 
 local effects = {}
 
-function button:interpolate (hover, colors, id)
+function button:interpolate (colors, id)
 
-    local type = self.textColor.hover == colors.hover and id..'text' or id..'bg'
-    if (self ~= hover and effects[type]) then
-        effects[type] = nil
-    end
-
-    local state = false
-    if (hover and hover == self and colors.effect ~= 'none') then
-        state = true
-    end
-    
-    if (state) then
+    if (colors.effect ~= 'none') then
+        local type = self.textColor.hover == colors.hover and id..'text' or id..'bg'
         if (not effects[type]) then
             effects[type] = {
-                status = {start = colors.notHover, final = colors.hover, effect = colors.effect},
-                tick = getTickCount ()
+                status = {start = colors.notHover, final = colors.notHover, effect = colors.easing.type, time = colors.easing.time},
+                tick = getTickCount (),
+                state = false
             }
         end
         
-        local progress = (getTickCount () - effects[type].tick) / 800
-
+        if (hover) then
+            if (not effects[type].state) then
+                effects[type].status = {start = colors.notHover, final = colors.hover, effect = colors.easing.type, time = colors.easing.time}
+                effects[type].tick = getTickCount ()
+                effects[type].state = true
+            end
+        else
+            if (effects[type].state) then
+                effects[type].status = {final = colors.notHover, start = colors.hover, effect = colors.easing.type, time = colors.easing.time}
+                effects[type].tick = getTickCount ()
+                effects[type].state = false
+            end
+        end
+        
         local r, g, b = interpolateBetween (
             effects[type].status.start[1],
             effects[type].status.start[2],
@@ -71,12 +76,12 @@ function button:interpolate (hover, colors, id)
             effects[type].status.final[1],
             effects[type].status.final[2],
             effects[type].status.final[3],
-            progress,
+            (getTickCount () - effects[type].tick) / effects[type].status.time,
             effects[type].effect or 'Linear'
         )
-        
         return tocolor (r, g, b)
     end
+
     return (hover == self and tocolor (unpack (colors.hover)) or tocolor (unpack (colors.notHover)))
 end
 
@@ -89,20 +94,19 @@ function button:render ()
         end
 
         dxDrawRectangle (
-            self.x, self.y,
-            self.w, self.h,
-            self:interpolate (hover, self.bgColor, position)
+            self.x + 2, self.y + 2,
+            self.w - 2, self.h - 4,
+            self:interpolate (self.bgColor, position)
         )
 
         dxDrawText (
             self.text,
-            self.x, self.y,
-            self.w, self.h,
-            self:interpolate (hover, self.textColor, position),
+            self.x + 2, self.y + 2,
+            self.w - 2, self.h - 4,
+            self:interpolate (self.textColor, position),
             1, self.font,
             'center', 'center'
         )
-
 
     end
 end
