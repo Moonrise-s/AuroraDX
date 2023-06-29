@@ -6,7 +6,7 @@ local hover
 
 function button:create (data)
     if (not self) then return error ('Error in argument #1. Define the object.') end
-    if (self.elements[id]) then return error ('Button exists') end
+    if (button.elements[id]) then return error ('Button exists') end
 
     local datas = data
 
