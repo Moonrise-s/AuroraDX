@@ -1,6 +1,5 @@
 
 local button = {}
-setmetatable (button, {__index = button})
 button.elements = {}
 
 local hover
