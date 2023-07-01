@@ -1,4 +1,7 @@
 
+-- Memory of System __AuroraComponentes
+aurora = { }
+
 screenW, screenH = guiGetScreenSize()
 
 _dxDrawText = dxDrawText
