@@ -2,8 +2,9 @@
     <oop>true</oop>
     <script src = 'src/shared/modules.lua' type = 'shared' cache = 'false' />
     <script src = 'src/client/main.lua' type = 'client' cache = 'false' />
+    <script src = 'src/client/svg.lua' type = 'client' cache = 'false' />
+    <script src = 'src/client/styles.lua' type = 'client' cache = 'false' />
     <script src = 'src/client/components/button.lua' type = 'client' cache = 'false' />
-    <script src = 'src/client/components/checkbox.lua' type = 'client' cache = 'false' />
     <script src = 'src/client/aliases.lua' type = 'client' cache = 'false' />
     <script src = 'src/client/render.lua' type = 'client' cache = 'false' />
 </aurora>
