@@ -1,4 +1,8 @@
 
+table_insert = table.insert
+table_remove = table.remove
+string_format = string.format
+
 local modules = { }
 
 function export (module, func)
