@@ -1,39 +1,40 @@
 
-local button = {}
-button.elements = {}
+local component = 'button'
+
+aurora.button = { }
+aurora.button.elements = { }
 
 local hover
 
-function button:create (data)
+function aurora.button:create (data)
     if (not self) then return error ('Error in argument #1. Define the object.') end
-    if (button.elements[id]) then return error ('Button exists') end
+    if (self.elements[id]) then return error ('Button exists') end
 
-    local datas = data
-
-    setmetatable (datas, {__index = button})
-    table_insert (button.elements, datas)
-
-    if (#button.elements <= 1) then
+    setmetatable (data, {__index = aurora.button})
+    table_insert (aurora.button.elements, data)
+    styleManager (component, data.style.type, #aurora.button.elements, data.w, data.h, unpack (data.style.args))
+    
+    if (#aurora.button.elements <= 1) then
         addEventHandler ('onClientClick', root, buttonClick)
     end
 
-    return datas
+    return data
 end
 
-function button:destroy ()
+function aurora.button:destroy ()
     if (not self) then return error ('Error in argument #1. Define the object.') end
     if (hover == self) then hover = nil end
-    for position, data in ipairs (button.elements) do
+    for position, data in ipairs (aurora.button.elements) do
         if (data == self) then
-            table_remove (button.elements, position)
-            if (#button.elements <= 0) then
+            table_remove (aurora.button.elements, position)
+            if (#aurora.button.elements <= 0) then
                 removeEventHandler ('onClientClick', root, buttonClick)
-            end        
+            end
         end
     end
 end
 
-function button:isInside ()
+function aurora.button:isInside ()
     if (not isCursorShowing ()) then return end
     local cx, cy = getCursorPosition ()
     local x, y = (cx * screenW), (cy * screenH)
@@ -42,7 +43,7 @@ end
 
 local effects = {}
 
-function button:interpolate (colors, id)
+function aurora.button:interpolate (colors, id)
 
     if (colors.effect ~= 'none') then
         local type = self.textColor.hover == colors.hover and id..'text' or id..'bg'
@@ -84,17 +85,18 @@ function button:interpolate (colors, id)
     return (hover == self and tocolor (unpack (colors.hover)) or tocolor (unpack (colors.notHover)))
 end
 
-function button:render ()
-    for position, self in ipairs (button.elements) do
+function aurora.button:render ()
+    for position, self in ipairs (aurora.button.elements) do
 
         hover = nil
         if (self:isInside ()) then
             hover = self
         end
 
-        dxDrawRectangle (
+        styles[component].render[self.style.type] (
             self.x, self.y,
             self.w, self.h,
+            position,
             self:interpolate (self.bgColor, position)
         )
 
@@ -117,5 +119,3 @@ function buttonClick (b, s, x, y)
         end
     end
 end
-
-export ('button', button)
